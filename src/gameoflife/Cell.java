@@ -26,11 +26,13 @@ public class Cell extends Rectangle {
         this.yIndex = yIndex;
     }
     
+    
+    
     public Color getColor() {
         if (alive) {
-            return Color.RED;
+            return Color.BLACK;
         }
-        return Color.BLUE;
+        return Color.WHITE;
     }
     
     public void toggleAlive() {

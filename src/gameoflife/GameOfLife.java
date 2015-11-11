@@ -16,8 +16,9 @@ public class GameOfLife extends Application {
     
     int cellsNumber = 50;
     int cellPadding = 3;
-    Cell[][] cells = populateCells();
     int windowSize = 500;
+    Cell[][] cells = populateCells(windowSize);
+    
     
     Pane root = new Pane();
     Scene scene = new Scene(root, 
@@ -37,21 +38,23 @@ public class GameOfLife extends Application {
     
     /**
      * populates cells[][] with ready to draw Cells (Rectangles)
-     * @return 2d int array of Cells
+     * @return 2d Cell array of Cells
      */
-    public Cell[][] populateCells() {
-        int xPos = 0;
-        int yPos = 0;
+    public Cell[][] populateCells(int windowSize) {
+        int xPos = 0 + cellPadding;
+        int yPos = 0 + cellPadding;
         int size = calculateCellSize();
+        Cell[] row;
+        Cell c;
         Cell[][] cellsArray = new Cell[cellsNumber][];
         for (int y=0; y < cellsNumber; y++) {
-            Cell[] row = new Cell[cellsNumber];
+            row = new Cell[cellsNumber];
             for (int x=0; x < cellsNumber; x++) {
-                Cell c = new Cell(xPos, yPos, size, size, x, y);
+                c = new Cell(xPos, yPos, size, size, x, y);
                 row[x] = c;
                 xPos += size + cellPadding;
             }
-            xPos = 0;
+            xPos = 0 + cellPadding;
             cellsArray[y] = row;
             yPos += size + cellPadding;
         }
@@ -59,10 +62,9 @@ public class GameOfLife extends Application {
     }
     
     public int calculateCellSize() {
-        System.out.println(windowSize / cellsNumber);
-        return windowSize / cellsNumber;
+        System.out.println(windowSize);
         
-       
+        return windowSize / cellsNumber;
     }
 
     @Override
