@@ -16,8 +16,9 @@ public class GameOfLife extends Application {
     
     int cellsNumber = 50;
     int cellPadding = 3;
-    int windowSize = 500;
-    Cell[][] cells = populateCells(windowSize);
+    int windowSize = 500 + cellPadding;
+    int cellSize = calculateCellSize();
+    Cell[][] cells = populateCells();
     
     
     Pane root = new Pane();
@@ -25,6 +26,55 @@ public class GameOfLife extends Application {
             windowSize + cellsNumber * cellPadding,
             windowSize + cellsNumber * cellPadding);
     
+    
+    
+    public Cell[][] getNewCellSet(Cell[][] currentCells) {
+        Cell[][] newCells = new Cell[cellsNumber][cellsNumber];
+        for(int y=0; y < cellsNumber; y++) {
+            for (int x=0; x < cellsNumber; x++) {
+                Cell c = currentCells[y][x];
+                c.alive = getCellFate(c);
+                newCells[y][x] = c;
+            }
+        }
+        return newCells;
+    }
+    
+    public Cell getCell(int y, int x) {
+        try {
+            return cells[y][x];
+        } catch (IndexOutOfBoundsException e) {
+            // returns Cell that is not alive
+            // as the x and y are out of bounds
+            return new Cell(); 
+        }     
+    }
+    
+    public boolean getCellFate(Cell c) {
+        int x = c.xIndex;
+        int y = c.yIndex;
+        int neighsAlive = 0;
+        Cell[] neighbours = new Cell[8]; // 8 number surrounding cells
+        neighbours[0] = getCell(y-1, x-1); // top left
+        neighbours[1] = getCell(y-1, x); //   top
+        neighbours[2] = getCell(y-1, x-1); // top right
+        neighbours[3] = getCell(y, x-1); //   left
+        neighbours[4] = getCell(y, x+1); //   right
+        neighbours[5] = getCell(y+1, x-1); // bottom left
+        neighbours[6] = getCell(y+1, x); //   bottom
+        neighbours[7] = getCell(y+1, x+1); // bottom right
+        
+        for (int i=0; i < 8; i++) {
+            if (neighbours[i].alive) {
+                neighsAlive++;
+            }
+        }
+        
+        if (neighsAlive == 2 || neighsAlive == 3) {
+            return true;
+        }
+        return false;
+    }
     
     public void drawCells(Cell[][] cells) {
         for (int y=0; y < cellsNumber; y++) {
@@ -40,10 +90,10 @@ public class GameOfLife extends Application {
      * populates cells[][] with ready to draw Cells (Rectangles)
      * @return 2d Cell array of Cells
      */
-    public Cell[][] populateCells(int windowSize) {
+    public Cell[][] populateCells() {
         int xPos = 0 + cellPadding;
         int yPos = 0 + cellPadding;
-        int size = calculateCellSize();
+        int size = cellSize;
         Cell[] row;
         Cell c;
         Cell[][] cellsArray = new Cell[cellsNumber][];
@@ -62,9 +112,7 @@ public class GameOfLife extends Application {
     }
     
     public int calculateCellSize() {
-        System.out.println(windowSize);
-        
-        return windowSize / cellsNumber;
+        return (windowSize + (cellPadding * cellsNumber)) / cellsNumber;
     }
 
     @Override
