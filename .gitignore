@@ -1,0 +1,11 @@
+# ignore netbeans project files
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+.nb-gradle/
+nbproject/
+manifest.mf
+build.xml
