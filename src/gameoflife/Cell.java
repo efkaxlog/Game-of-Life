@@ -14,7 +14,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Cell extends Rectangle {
     
-    boolean alive = true; //Math.random() < 0.5;
+    boolean alive;// = Math.random() < 0.5;
     int xIndex, yIndex;
     Color aliveColor = Color.BLACK;
     Color deadColor = Color.WHITE;
@@ -26,10 +26,12 @@ public class Cell extends Rectangle {
         this.setHeight(h);
         this.xIndex = xIndex;
         this.yIndex = yIndex;
+        this.alive = Math.random() < 0.5;
     }
     
     // for cell out of bounds
     public Cell() {
+        
         this.alive = false;
     }
 
@@ -62,8 +64,8 @@ public class Cell extends Rectangle {
     
     public void printInfo() {
         System.out.println("State: " + alive);
-        System.out.println("X: "+this.getX());
-        System.out.println("Y: "+this.getY());
+        System.out.println("Y: "+yIndex);
+        System.out.println("X: "+xIndex);
     }
     
 }
