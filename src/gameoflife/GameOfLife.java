@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 public class GameOfLife extends Application {
     
     int cellsNumber = 30;
-    int cellPadding = 1;
+    int cellPadding = 2;
     int windowSize = 500 + cellPadding;
     int cellSize = calculateCellSize();
     Cell[][] cells = populateCells();
@@ -33,9 +33,7 @@ public class GameOfLife extends Application {
         public void handle(MouseEvent event) {
             Object obj = event.getSource();
             if (obj instanceof Cell) {
-                root.getChildren().remove(obj);
                 ((Cell) obj).toggleAlive();
-                root.getChildren().add((Cell)obj);
             }
         }
     };
@@ -139,12 +137,9 @@ public class GameOfLife extends Application {
         for (int y=0; y < cellsNumber; y++) {
             for (int x=0; x < cellsNumber; x++) {
                 Cell c = cells[y][x];
-                c.setStroke(c.getColor());
+                c.setFill(c.getColor());
                 c.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
                 root.getChildren().add(c);
-//                if (c.alive) {
-//                    
-//                }
             }
         }
     }
@@ -183,12 +178,8 @@ public class GameOfLife extends Application {
     public void start(Stage stage) throws Exception {
         stage.setScene(scene);
         stage.setTitle("Game of Life");
-        cells[5][4].alive = true;
-        cells[5][5].alive = true;
-        cells[5][6].alive = true;
         drawCells(cells);
-        scene.setOnKeyPressed(h);
-        
+        scene.setOnKeyPressed(h);        
         stage.show();
        // at.start();
     }

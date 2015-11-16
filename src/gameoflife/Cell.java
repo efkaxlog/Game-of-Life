@@ -46,22 +46,20 @@ public class Cell extends Rectangle {
     
     public void toggleAlive() {
         if (alive){
-            alive = false;
-            this.setStroke(deadColor);
+            makeDead();
         } else {
-            alive = true;
-            this.setStroke(aliveColor);
+            makeAlive();
         }
     }
     
     public void makeAlive() {
         this.alive = true;
-        this.setStroke(aliveColor);
+        this.setFill(aliveColor);
     }
     
     public void makeDead() {
         this.alive = false;
-        this.setStroke(deadColor);
+        this.setFill(deadColor);
     }
     
     public void printInfo() {
