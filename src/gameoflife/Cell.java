@@ -5,8 +5,6 @@
  */
 package gameoflife;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -16,7 +14,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Cell extends Rectangle {
     
-    boolean alive;// = Math.random() < 0.5;
+    boolean alive;
     int xIndex, yIndex;
     Color aliveColor = Color.BLACK;
     Color deadColor = Color.WHITE;
@@ -28,15 +26,25 @@ public class Cell extends Rectangle {
         this.setHeight(h);
         this.xIndex = xIndex;
         this.yIndex = yIndex;
-        this.alive = Math.random() < 0.5;
+        this.alive = false;//Math.random() < 0.5;
     }
     
-    // for cell out of bounds
+    /**
+     * for Cells with out of bounds coordinates
+     * for example if x == -1 or x > array.size
+     * the Cell is assumed to be dead therefore
+     * no extra alive neighbours are given for
+     * a Cell for which alive neighbours are 
+     * being counted up
+     */
     public Cell() {
-        
         this.alive = false;
     }
 
+    /**
+     * 
+     * @return defined colours for dead and alive state
+     */
     public Color getColor() {
         if (alive) {
             return aliveColor;
@@ -62,6 +70,9 @@ public class Cell extends Rectangle {
         this.setFill(deadColor);
     }
     
+    /**
+     * for debugging purposes
+     */
     public void printInfo() {
         System.out.println("State: " + alive);
         System.out.println("Y: "+yIndex);

@@ -2,7 +2,6 @@ package gameoflife;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -19,11 +18,11 @@ import javafx.stage.Stage;
  */
 public class GameOfLife extends Application {
     
-    int cellsNumber = 30;
-    int cellPadding = 2;
+    int cellsNumber = 30; // number of cells in rows and columns
+    int cellPadding = 2; // empty space between cells
     int windowSize = 500 + cellPadding;
-    int cellSize = calculateCellSize();
-    Cell[][] cells = populateCells();
+    int cellSize = calculateCellSize(); // fit cells to window size
+    Cell[][] cells = populateCells(); // get first set of cells
     int totalSize = windowSize + cellsNumber * cellPadding;
     Pane root = new Pane();
     Scene scene = new Scene(root, totalSize, totalSize);
@@ -42,7 +41,7 @@ public class GameOfLife extends Application {
         @Override
         public void handle(KeyEvent keyEvent) {
             if (keyEvent.getCode() == KeyCode.SPACE) {
-                drawNewSet();
+                drawNewSet(); // one iteration forward
         }
     }};
     
@@ -52,18 +51,10 @@ public class GameOfLife extends Application {
             drawNewSet();
         }
     };
-    
-    public void clearScreen() {
-        Rectangle r = new Rectangle();
-        r.setX(0);
-        r.setY(0);
-        r.setWidth(totalSize);
-        r.setHeight(totalSize);
-        r.setStroke(Color.WHITE);
-        root.getChildren().add(r);
-    }
-    
-    
+ 
+    /**
+     * gets the next cell generation and draws them
+     */
     public void drawNewSet() {
         Cell[][] newCells = getNewCellSet(cells);
         root.getChildren().clear();    
@@ -71,6 +62,11 @@ public class GameOfLife extends Application {
         cells = newCells;
     }
     
+    /**
+     * 
+     * @param currentCells
+     * @return next generation of cells
+     */
     public Cell[][] getNewCellSet(Cell[][] currentCells) {
         Cell[][] newCells = new Cell[cellsNumber][cellsNumber];
         for(int y=0; y < cellsNumber; y++) {
@@ -78,7 +74,6 @@ public class GameOfLife extends Application {
                 Cell c = currentCells[y][x];
                 Cell newC = new Cell(c.getX(), c.getY(), cellSize, cellSize, c.xIndex, c.yIndex);
                 newC.alive = getCellFate(c);
-                
                 newCells[y][x] = newC;
             }
         }
@@ -87,11 +82,10 @@ public class GameOfLife extends Application {
     
     public Cell getCell(int y, int x) {
         try {
-            //System.out.println("ALIVE CELL Y: "+ y+ " X: " +x);
             return cells[y][x];
         } catch (IndexOutOfBoundsException e) {
             // returns Cell that is not alive
-            // as the x and y are out of bounds
+            // as the x or y are out of bounds
             return new Cell();
             
         }     
@@ -112,13 +106,10 @@ public class GameOfLife extends Application {
         neighbours[7] = getCell(y+1, x+1); // bottom right
         
         for (int i=0; i < 8; i++) {
-            //System.out.println(neighbours[i].alive + " Y: "+neighbours[i].yIndex + " X: " + neighbours[i].xIndex);
             if (neighbours[i].alive) {
-                neighsAlive+= 1;
+                neighsAlive += 1;
             }  
         }
-        //System.out.println("Current Cell: Y: " + c.yIndex + " X: " + c.xIndex+ " Alive: " +neighsAlive);
-        //System.out.println("-----------------------------");
         
         if ((c.alive) && (neighsAlive == 2 || neighsAlive == 3)) {
             return true; // just right to live on
@@ -128,11 +119,17 @@ public class GameOfLife extends Application {
             return false; // overpopulation
         } else if (!c.alive && neighsAlive == 3) {
             return true; // dead cell comes alive
+            // netbeans says the above if is reduntant, however
+            // the game doesn't work properly without it
         } else {
-            return false;
+            return false; // if none of the above apply the cell will be dead
         } 
     }
     
+    /**
+     * draws cells in the window
+     * @param cells 
+     */
     public void drawCells(Cell[][] cells) {
         for (int y=0; y < cellsNumber; y++) {
             for (int x=0; x < cellsNumber; x++) {
@@ -170,6 +167,10 @@ public class GameOfLife extends Application {
         return cellsArray;
     }
     
+    /**
+     * calculate a cell size to be used by all cells
+     * @return 
+     */
     public int calculateCellSize() {
         return (windowSize + cellPadding) / cellsNumber;
     }
@@ -189,7 +190,5 @@ public class GameOfLife extends Application {
      */
     public static void main(String[] args) {
        launch(args);
-    }
-
-    
+    }  
 }
