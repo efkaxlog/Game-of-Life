@@ -9,3 +9,8 @@ nbactions.xml
 nbproject/
 manifest.mf
 build.xml
+
+# ignore IntelliJ project files
+.idea/
+GameOfLife.iml
+out/
