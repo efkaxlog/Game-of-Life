@@ -4,10 +4,10 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -27,6 +27,18 @@ public class GameOfLife extends Application {
     int totalSize = windowSize + cellsNumber * cellPadding;
     Pane root = new Pane();
     Scene scene = new Scene(root, totalSize, totalSize);
+    
+    EventHandler clickHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            Object obj = event.getSource();
+            if (obj instanceof Cell) {
+                root.getChildren().remove(obj);
+                ((Cell) obj).toggleAlive();
+                root.getChildren().add((Cell)obj);
+            }
+        }
+    };
     
     EventHandler h = new EventHandler<KeyEvent>() {
         @Override
@@ -128,9 +140,11 @@ public class GameOfLife extends Application {
             for (int x=0; x < cellsNumber; x++) {
                 Cell c = cells[y][x];
                 c.setStroke(c.getColor());
-                if (c.alive) {
-                    root.getChildren().add(c);
-                }
+                c.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
+                root.getChildren().add(c);
+//                if (c.alive) {
+//                    
+//                }
             }
         }
     }
@@ -174,6 +188,7 @@ public class GameOfLife extends Application {
         cells[5][6].alive = true;
         drawCells(cells);
         scene.setOnKeyPressed(h);
+        
         stage.show();
        // at.start();
     }
