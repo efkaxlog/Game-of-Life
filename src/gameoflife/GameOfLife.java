@@ -16,17 +16,16 @@ import javafx.stage.Stage;
  */
 public class GameOfLife extends Application {
     
-    int cellsNumber = 30; // number of cells in rows and columns
+    int cellsNumber = 200; // number of cells in rows and columns
     int cellPadding = 2; // empty space between cells
     int windowSize = 500 + cellPadding;
     int cellSize = calculateCellSize(); // fit cells to window size
-    Cell[][] cells = populateCells(); // get first set of cells
+    
     int totalSize = windowSize + cellsNumber * cellPadding;
     Pane root = new Pane();
-    Scene scene = new Scene(root, totalSize, totalSize);
-    boolean atRunning = false;
     
-    EventHandler clickHandler = new EventHandler<MouseEvent>() {
+    //must add this handler here populateCells() needs to have it defined
+    EventHandler<MouseEvent> clickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             Object obj = event.getSource();
@@ -35,6 +34,12 @@ public class GameOfLife extends Application {
             }
         }
     };
+    
+    Cell[][] cells = populateCells(); // get first set of cells and draw
+    Scene scene = new Scene(root, totalSize, totalSize);
+    boolean atRunning = false;
+    
+    
     
     EventHandler<MouseEvent> mouseDragHandler= new EventHandler<MouseEvent>() {
 		@Override
@@ -56,7 +61,7 @@ public class GameOfLife extends Application {
 			 }	
 		}};
     
-    EventHandler h = new EventHandler<KeyEvent>() {
+    EventHandler keyHandler = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent keyEvent) {
         	KeyCode key = keyEvent.getCode();
@@ -105,9 +110,13 @@ public class GameOfLife extends Application {
      */
     public void drawNewSet() {
         Cell[][] newCells = getNewCellSet(cells);
-        root.getChildren().clear();    
-        drawCells(newCells);
-        cells = newCells;
+        for (int y=0; y < cellsNumber; y++) {
+            for (int x=0; x < cellsNumber; x++) {
+            	Cell c = cells[x][y];
+            	c.alive = newCells[x][y].alive;
+            	c.setFill(c.getColor());
+            }
+        }
     }
     
     /**
@@ -185,7 +194,7 @@ public class GameOfLife extends Application {
     /**
      * draws cells in the window
      * @param cells 
-     */
+     *
     public void drawCells(Cell[][] cells) {
         for (int y=0; y < cellsNumber; y++) {
             for (int x=0; x < cellsNumber; x++) {
@@ -196,9 +205,13 @@ public class GameOfLife extends Application {
             }
         }
     }
+    */
+    
     
     /**
-     * populates cells[][] with ready to draw Cells (Rectangles)
+     * populates cells[][] with first generation of Cells
+     * and draws by adding to root. Adding to root should
+     * only be done once - here.
      * @return 2d Cell array of Cells
      */
     public Cell[][] populateCells() {
@@ -214,6 +227,10 @@ public class GameOfLife extends Application {
                 c = new Cell(xPos, yPos, size, size, x, y);
                 row[x] = c;
                 xPos += size + cellPadding;
+                c.setFill(c.getColor());
+                c.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
+                root.getChildren().add(c);
+                
             }
             xPos = 0 + cellPadding;
             cellsArray[y] = row;
@@ -235,8 +252,7 @@ public class GameOfLife extends Application {
     public void start(Stage stage) throws Exception {
         stage.setScene(scene);
         stage.setTitle("Game of Life");
-        drawCells(cells);
-        scene.setOnKeyPressed(h);        
+        scene.setOnKeyPressed(keyHandler);        
         stage.show();
        // at.start();
         
