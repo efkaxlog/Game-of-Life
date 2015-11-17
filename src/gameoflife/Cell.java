@@ -26,7 +26,7 @@ public class Cell extends Rectangle {
         this.setHeight(h);
         this.xIndex = xIndex;
         this.yIndex = yIndex;
-        this.alive = false;//Math.random() < 0.5;
+        this.alive = Math.random() < 0.5;
     }
     
     /**
@@ -78,5 +78,4 @@ public class Cell extends Rectangle {
         System.out.println("Y: "+yIndex);
         System.out.println("X: "+xIndex);
     }
-    
 }
