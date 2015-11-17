@@ -2,12 +2,15 @@ package gameoflife;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -16,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class GameOfLife extends Application {
     
-    int cellsNumber = 200; // number of cells in rows and columns
+    int cellsNumber = 40; // number of cells in rows and columns
     int cellPadding = 2; // empty space between cells
     int windowSize = 500 + cellPadding;
     int cellSize = calculateCellSize(); // fit cells to window size
@@ -25,12 +28,27 @@ public class GameOfLife extends Application {
     Pane root = new Pane();
     
     //must add this handler here populateCells() needs to have it defined
-    EventHandler<MouseEvent> clickHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> cellClickHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent e) {
+            Cell c = (Cell) e.getSource();
+            if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                c.toggleAlive();
+            } else if (e.getEventType() == MouseEvent.MOUSE_ENTERED) {
+                c.drawBorder();
+            } else if (e.getEventType() == MouseEvent.MOUSE_EXITED) {
+                c.deleteBorder();
+            }
+        }
+        
+    };
+    
+    EventHandler<MouseEvent> mouseHoveringHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             Object obj = event.getSource();
             if (obj instanceof Cell) {
-                ((Cell) obj).toggleAlive();
+                ((Cell) obj).setStroke(Color.RED);
             }
         }
     };
@@ -234,7 +252,8 @@ public class GameOfLife extends Application {
                 row[x] = c;
                 xPos += size + cellPadding;
                 c.setFill(c.getColor());
-                c.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
+                c.addEventHandler(MouseEvent.ANY, cellClickHandler);
+                c.setOnMouseEntered(mouseHoveringHandler);
                 root.getChildren().add(c);
                 
             }
