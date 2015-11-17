@@ -188,7 +188,7 @@ public class GameOfLife extends Application {
             return false; // overpopulation
         } else if (!c.alive && neighsAlive == 3) {
             return true; // dead cell comes alive
-            // netbeans says the above if is reduntant, however
+            // IDE says the above if is reduntant, however
             // the game doesn't work properly without it
         } else {
             return false; // if none of the above apply the cell will be dead
@@ -202,23 +202,6 @@ public class GameOfLife extends Application {
             }
     	}
     }
-    
-    /**
-     * draws cells in the window
-     * @param cells 
-     *
-    public void drawCells(Cell[][] cells) {
-        for (int y=0; y < cellsNumber; y++) {
-            for (int x=0; x < cellsNumber; x++) {
-                Cell c = cells[y][x];
-                c.setFill(c.getColor());
-                c.addEventFilter(MouseEvent.MOUSE_PRESSED, clickHandler);
-                root.getChildren().add(c);
-            }
-        }
-    }
-    */
-    
     
     /**
      * populates cells[][] with first generation of Cells
