@@ -2,9 +2,7 @@ package gameoflife;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -42,17 +40,7 @@ public class GameOfLife extends Application {
         }
         
     };
-    
-    EventHandler<MouseEvent> mouseHoveringHandler = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            Object obj = event.getSource();
-            if (obj instanceof Cell) {
-                ((Cell) obj).setStroke(Color.RED);
-            }
-        }
-    };
-    
+
     Cell[][] cells = populateCells(); // get first set of cells and draw
     Scene scene = new Scene(root, totalSize, totalSize);
     boolean atRunning = false;
@@ -253,7 +241,6 @@ public class GameOfLife extends Application {
                 xPos += size + cellPadding;
                 c.setFill(c.getColor());
                 c.addEventHandler(MouseEvent.ANY, cellClickHandler);
-                c.setOnMouseEntered(mouseHoveringHandler);
                 root.getChildren().add(c);
                 
             }
