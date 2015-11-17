@@ -65,20 +65,26 @@ public class GameOfLife extends Application {
         @Override
         public void handle(KeyEvent keyEvent) {
         	KeyCode key = keyEvent.getCode();
-            if (key == KeyCode.RIGHT) {
-                drawNewSet(); // one iteration forward
-            } else if (key == KeyCode.SPACE){ 
-            	if (atRunning) {
-            		at.stop();
-            		atRunning = false;
-            	} else {
-            		atRunning = true;
-            		at.start();
-            	}
-            } else if (key == KeyCode.C) {
-            	killAllCells();
-            } else if (key == KeyCode.R) {
-            	generateRandomCells();
+            if (key != null) switch (key) {
+                case RIGHT:
+                    drawNewSet(); // one iteration forward
+                    break;
+                case SPACE:
+                    if (atRunning) {
+                        at.stop();
+                        atRunning = false;
+                    } else {
+                        atRunning = true;
+                        at.start();
+                    }   break;
+                case C:
+                    killAllCells();
+                    break;
+                case R:
+                    generateRandomCells();
+                    break;
+                default:
+                    break;
             }
             
     }};
