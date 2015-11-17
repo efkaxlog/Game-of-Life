@@ -18,6 +18,7 @@ public class Cell extends Rectangle {
     int xIndex, yIndex;
     Color aliveColor = Color.BLACK;
     Color deadColor = Color.WHITE;
+    Color hoverBorderColor = Color.CHARTREUSE;
     
     public Cell(double x, double y, double w, double h, int xIndex, int yIndex) {
         this.setX(x);
@@ -40,7 +41,21 @@ public class Cell extends Rectangle {
     public Cell() {
         this.alive = false;
     }
-
+    
+    /**
+     * draw border around Cell
+     */
+    public void drawBorder() {
+        setStroke(hoverBorderColor);
+    }
+    
+    /**
+     * deletes border around Cell
+     */
+    public void deleteBorder() {
+        setStroke(null);
+    }
+    
     /**
      * 
      * @return defined colours for dead and alive state
