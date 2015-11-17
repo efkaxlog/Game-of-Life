@@ -1,4 +1,4 @@
-# ignore netbeans project files
+# ignore netbeans IDE project files
 nbproject/private/
 build/
 nbbuild/
@@ -10,7 +10,13 @@ nbproject/
 manifest.mf
 build.xml
 
-# ignore IntelliJ project files
+# ignore IntelliJ IDE project files
 .idea/
 GameOfLife.iml
 out/
+
+#ignore Eclipse IDE project files
+.classpath
+.project
+.settings/
+bin/
