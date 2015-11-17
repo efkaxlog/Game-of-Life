@@ -8,8 +8,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -26,6 +24,7 @@ public class GameOfLife extends Application {
     int totalSize = windowSize + cellsNumber * cellPadding;
     Pane root = new Pane();
     Scene scene = new Scene(root, totalSize, totalSize);
+    boolean atRunning = false;
     
     EventHandler clickHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -37,12 +36,46 @@ public class GameOfLife extends Application {
         }
     };
     
+    EventHandler<MouseEvent> mouseDragHandler= new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent e) {
+			 for (int y=0; y < cellsNumber; y++) {
+		            for (int x=0; x < cellsNumber; x++) {
+		            	Cell c = cells[y][x];
+		            	double xPos = c.getX();
+		            	double yPos = c.getY();
+		            	double w = c.getWidth();
+		            	double h = c.getHeight();
+		            	// C as in coordinate
+		            	double xC = e.getX();
+		            	double yC = e.getY();
+		            	if ((xC >= xPos && xC <= xPos + w) && (yC >= yPos && yC <= yPos + h)) {
+		            		c.makeAlive();
+		            	}
+		            }
+			 }	
+		}};
+    
     EventHandler h = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent keyEvent) {
-            if (keyEvent.getCode() == KeyCode.SPACE) {
+        	KeyCode key = keyEvent.getCode();
+            if (key == KeyCode.RIGHT) {
                 drawNewSet(); // one iteration forward
-        }
+            } else if (key == KeyCode.SPACE){ 
+            	if (atRunning) {
+            		at.stop();
+            		atRunning = false;
+            	} else {
+            		atRunning = true;
+            		at.start();
+            	}
+            } else if (key == KeyCode.C) {
+            	killAllCells();
+            } else if (key == KeyCode.R) {
+            	generateRandomCells();
+            }
+            
     }};
     
     AnimationTimer at = new AnimationTimer() {
@@ -51,6 +84,21 @@ public class GameOfLife extends Application {
             drawNewSet();
         }
     };
+    
+    /**
+     * generates random cells and draws them
+     */
+    public void generateRandomCells() {
+    	for (int y=0; y < cellsNumber; y++) {
+            for (int x=0; x < cellsNumber; x++) {
+            	if (Math.random() < 0.5) { 
+            		cells[y][x].makeAlive(); 
+            	} else {
+            		cells[y][x].makeDead();
+            	}
+            }
+    	}
+    }
  
     /**
      * gets the next cell generation and draws them
@@ -126,6 +174,14 @@ public class GameOfLife extends Application {
         } 
     }
     
+    public void killAllCells() {
+    	for (int y=0; y < cellsNumber; y++) {
+            for (int x=0; x < cellsNumber; x++) {
+            	cells[y][x].makeDead();
+            }
+    	}
+    }
+    
     /**
      * draws cells in the window
      * @param cells 
@@ -183,6 +239,8 @@ public class GameOfLife extends Application {
         scene.setOnKeyPressed(h);        
         stage.show();
        // at.start();
+        
+        root.setOnMouseDragged(mouseDragHandler);
     }
     
     /**
