@@ -21,13 +21,13 @@ public class Cell extends Rectangle {
     Color hoverBorderColor = Color.CHARTREUSE;
     
     public Cell(double x, double y, double w, double h, int xIndex, int yIndex) {
-        this.setX(x);
-        this.setY(y);
-        this.setWidth(w);
-        this.setHeight(h);
+        setX(x);
+        setY(y);
+        setWidth(w);
+        setHeight(h);
         this.xIndex = xIndex;
         this.yIndex = yIndex;
-        this.alive = Math.random() < 0.5;
+        alive = Math.random() < 0.5;
     }
     
     /**
@@ -39,7 +39,7 @@ public class Cell extends Rectangle {
      * being counted up
      */
     public Cell() {
-        this.alive = false;
+        alive = false;
     }
     
     /**
@@ -76,13 +76,13 @@ public class Cell extends Rectangle {
     }
     
     public void makeAlive() {
-        this.alive = true;
-        this.setFill(aliveColor);
+        alive = true;
+        setFill(aliveColor);
     }
     
     public void makeDead() {
-        this.alive = false;
-        this.setFill(deadColor);
+        alive = false;
+        setFill(deadColor);
     }
     
     /**
